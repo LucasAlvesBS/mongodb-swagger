@@ -1,0 +1,54 @@
+version: "3.7" 
+services:
+  
+  database_mongodb:
+    image: mongo:4.2.6
+    container_name: database_mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - mongo_data:/data/db
+    tty: true
+    ports:
+      - "27017:27017" 
+    env_file:
+      - .env
+  
+  api:
+    container_name: api_mongodb
+    build: 
+      context: .
+    volumes:
+      - ./src:/app/src
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - database_mongodb
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=database_mongodb
+    command: npm run start:dev
+
+  migrate:
+    build:
+      context: .
+    restart: on-failure
+    command:
+      [
+        "./wait-for-it/wait-for-it.sh",
+        "database_mongodb:27017",
+        "--",
+        "migrate-mongo",
+        "up"
+      ]
+    depends_on:
+      - database_mongodb
+    env_file: .env
+    environment:
+      - DB_HOST=database_mongodb
+
+volumes:
+  mongo_data: null
