@@ -10,8 +10,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BadRequestSwagger } from 'src/helpers/swagger/bad-request.swagger';
-import { NotFoundSwagger } from 'src/helpers/swagger/not-found.swagger';
+import { BadRequestSwagger } from '../helpers/swagger/bad-request.swagger';
+import { NotFoundSwagger } from '../helpers/swagger/not-found.swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersDocument } from './schemas/users.schema';
