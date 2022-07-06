@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,24 +16,45 @@ export class UsersService {
   ) {}
 
   async findAllUsers() {
-    return await this.usersModel.find().exec();
+    return await this.usersModel.find();
   }
 
   async findOneUser(id: string) {
-    return await this.usersModel.findById(id).exec();
+    const user = await this.usersModel.findById(id);
+    if (user === null) {
+      throw new NotFoundException('Page not found');
+    }
+    return user;
   }
 
   async createUser(data: CreateUserDto) {
-    const user = new this.usersModel(data);
+    const { email } = data;
+    const duplicate = await this.usersModel.findOne({ email });
+    if (duplicate) {
+      throw new ConflictException('Invalid email');
+    }
+    const user = await this.usersModel.create(data);
     return await user.save();
   }
 
   async updateUser(id: string, data: UpdateUserDto) {
-    await this.usersModel.updateOne({ _id: id }, data).exec();
-    return await this.findOneUser(id);
+    const user = await this.usersModel.findById(id);
+    if (user === null) {
+      throw new NotFoundException('Page not found');
+    }
+    const { email } = data;
+    const duplicate = await this.usersModel.findOne({ email });
+    if (duplicate) {
+      throw new ConflictException('Invalid email');
+    }
+    await this.usersModel.updateOne({ _id: id }, data);
   }
 
   async removeUser(id: string) {
-    return await this.usersModel.deleteOne({ _id: id }).exec();
+    const user = await this.usersModel.findById(id);
+    if (user === null) {
+      throw new NotFoundException('Page not found');
+    }
+    await this.usersModel.deleteOne({ _id: id });
   }
 }
