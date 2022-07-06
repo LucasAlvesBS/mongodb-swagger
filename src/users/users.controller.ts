@@ -89,7 +89,7 @@ export class UsersController {
   async updateUser(
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
-  ): Promise<UsersDocument> {
+  ): Promise<void> {
     return await this.usersService.updateUser(id, body);
   }
 
