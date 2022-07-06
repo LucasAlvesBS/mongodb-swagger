@@ -59,7 +59,7 @@ describe('UsersController', () => {
   });
 
   describe('findAllUsers', () => {
-    it('should return a users list schema sucessfully', async () => {
+    it('should return a users schema list sucessfully', async () => {
       const result = await usersController.findAllUsers();
 
       expect(result).toEqual(usersSchemaList);
