@@ -18,6 +18,10 @@ export class User {
   @ApiProperty()
   password: string;
 
+  @Prop()
+  @ApiProperty()
+  profileImage: string;
+
   constructor(user?: Partial<User>) {
     this.name = user?.name;
     this.email = user?.email;

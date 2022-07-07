@@ -8,8 +8,14 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+  Res,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
 import { BadRequestSwagger } from '../helpers/swagger/bad-request.swagger';
 import { NotFoundSwagger } from '../helpers/swagger/not-found.swagger';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +25,10 @@ import { CreateUserSwagger } from './swagger/create-user.swagger';
 import { IndexUserSwagger } from './swagger/index-user.swagger';
 import { ShowUserSwagger } from './swagger/show-user.swagger';
 import { UsersService } from './users.service';
+import { v4 as uuidv4 } from 'uuid';
+import { of } from 'rxjs';
+import { join } from 'path';
+import { Response } from 'express';
 
 @Controller('api/v1/users')
 @ApiTags('users')
@@ -26,10 +36,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os usuários' })
+  @ApiOperation({ summary: 'List all users' })
   @ApiResponse({
     status: 200,
-    description: 'Lista de usuários retornada com sucesso',
+    description: 'User lists returned sucessfully',
     type: IndexUserSwagger,
     isArray: true,
   })
@@ -38,51 +48,97 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Exibir um usuário' })
+  @ApiOperation({ summary: 'Display a user' })
   @ApiResponse({
     status: 200,
-    description: 'Perfil do usuário retornado com sucesso',
+    description: 'A user returned sucessfully',
     type: ShowUserSwagger,
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuário não encontrado',
+    description: 'User not found',
     type: NotFoundSwagger,
   })
   async findOneUser(@Param('id') id: string): Promise<UsersDocument> {
     return await this.usersService.findOneUser(id);
   }
 
+  @Get('pictures/:filename')
+  getPicture(@Param('filename') filename, @Res() res: Response) {
+    return of(
+      res.sendFile(join(process.cwd(), 'src/users/uploads/' + filename)),
+    );
+  }
+
   @Post()
-  @ApiOperation({ summary: 'Criar um usuário' })
+  @ApiOperation({ summary: 'Create a user' })
   @ApiResponse({
     status: 201,
-    description: 'Usuário criado com sucesso',
+    description: 'User created sucessfully',
     type: CreateUserSwagger,
   })
   @ApiResponse({
     status: 400,
-    description: 'Dados inválidos',
+    description: 'Invalid data',
     type: BadRequestSwagger,
   })
   async createUSer(@Body() body: CreateUserDto): Promise<UsersDocument> {
     return await this.usersService.createUser(body);
   }
 
+  @Post('upload/:id')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './src/users/uploads',
+        filename: (req, file, cb) => {
+          const filename: string = file.originalname.split('.')[0];
+          const extension: string = file.originalname.split('.')[1];
+          const newFileName: string =
+            filename.split(' ').join('_') + '_' + uuidv4() + '.' + extension;
+
+          cb(null, newFileName);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+          return cb(null, false);
+        }
+        return cb(null, true);
+      },
+    }),
+  )
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    if (!file) {
+      throw new BadRequestException('File is not an image');
+    } else {
+      await this.usersService.updateUser(id, {
+        profileImage: file.filename,
+      });
+      return of(
+        res.sendFile(join(process.cwd(), 'src/users/uploads/' + file.filename)),
+      );
+    }
+  }
+
   @Patch(':id')
-  @ApiOperation({ summary: 'Atualziar um usuário' })
+  @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 204,
-    description: 'Usuário atualizado com sucesso',
+    description: 'User updated sucessfully',
   })
   @ApiResponse({
     status: 400,
-    description: 'Dados inválidos',
+    description: 'Invalid data',
     type: BadRequestSwagger,
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuário não encontrado',
+    description: 'User not found',
     type: NotFoundSwagger,
   })
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -94,11 +150,11 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover um usuário' })
-  @ApiResponse({ status: 204, description: 'Usuário removido com sucesso' })
+  @ApiOperation({ summary: 'Remove a user' })
+  @ApiResponse({ status: 204, description: 'User removed sucessfully' })
   @ApiResponse({
     status: 404,
-    description: 'Usuário não encontrado',
+    description: 'User not found',
     type: NotFoundSwagger,
   })
   async removeUser(@Param('id') id: string) {
