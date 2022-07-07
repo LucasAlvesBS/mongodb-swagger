@@ -16,8 +16,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
-import { BadRequestSwagger } from '../helpers/swagger/bad-request.swagger';
-import { NotFoundSwagger } from '../helpers/swagger/not-found.swagger';
+import { BadRequestSwagger } from '../helpers/swagger.helper';
+import { NotFoundSwagger } from '../helpers/swagger.helper';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersDocument } from './schemas/users.schema';
@@ -64,6 +64,11 @@ export class UsersController {
   }
 
   @Get('pictures/:filename')
+  @ApiOperation({ summary: 'Display a picture' })
+  @ApiResponse({
+    status: 200,
+    description: 'A picture returned sucessfully',
+  })
   getPicture(@Param('filename') filename, @Res() res: Response) {
     return of(
       res.sendFile(join(process.cwd(), 'src/users/uploads/' + filename)),
@@ -108,6 +113,21 @@ export class UsersController {
       },
     }),
   )
+  @ApiOperation({ summary: 'File upload' })
+  @ApiResponse({
+    status: 201,
+    description: 'File upload sucessfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid file',
+    type: BadRequestSwagger,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+    type: NotFoundSwagger,
+  })
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,

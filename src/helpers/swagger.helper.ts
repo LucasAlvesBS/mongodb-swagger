@@ -10,3 +10,14 @@ export class BadRequestSwagger {
   @ApiProperty()
   error: string;
 }
+
+export class NotFoundSwagger {
+  @ApiProperty()
+  statusCode: number;
+
+  @ApiProperty()
+  message: string;
+
+  @ApiProperty()
+  error: string;
+}
