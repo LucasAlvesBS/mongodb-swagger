@@ -54,7 +54,7 @@ describe('UsersService', () => {
   });
 
   describe('findAllUsers', () => {
-    it('should return a users schema list sucessfully', async () => {
+    it('should return a users schema list successfully', async () => {
       const result = await usersService.findAllUsers();
 
       expect(result).toEqual(usersSchemaList);
@@ -69,7 +69,7 @@ describe('UsersService', () => {
   });
 
   describe('findOneUser', () => {
-    it('should return one users sucessfully', async () => {
+    it('should return one users successfully', async () => {
       const result = await usersService.findOneUser('1');
 
       expect(result).toEqual(usersSchemaList[0]);
@@ -89,7 +89,7 @@ describe('UsersService', () => {
   });
 
   describe('createUser', () => {
-    it('should create a user sucessfully', async () => {
+    it('should create a user successfully', async () => {
       const body: CreateUserDto = {
         name: 'NewUser',
         email: 'newuser@hotmail.com',
@@ -105,7 +105,7 @@ describe('UsersService', () => {
   });
 
   describe('updateUser', () => {
-    it('should update a user sucessfully', async () => {
+    it('should update a user successfully', async () => {
       const body: UpdateUserDto = {
         name: 'UpdatedUser',
         email: 'updateduser@hotmail.com',
@@ -150,7 +150,7 @@ describe('UsersService', () => {
   });
 
   describe('removeUser', () => {
-    it('should remove a user sucessfully', async () => {
+    it('should remove a user successfully', async () => {
       const result = await usersService.removeUser('1');
 
       expect(result).toBeUndefined();

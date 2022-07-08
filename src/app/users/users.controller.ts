@@ -16,8 +16,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
-import { BadRequestSwagger } from '../helpers/swagger.helper';
-import { NotFoundSwagger } from '../helpers/swagger.helper';
+import { BadRequestSwagger } from '../../helpers/swagger.helper';
+import { NotFoundSwagger } from '../../helpers/swagger.helper';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersDocument } from './schemas/users.schema';
@@ -39,7 +39,7 @@ export class UsersController {
   @ApiOperation({ summary: 'List all users' })
   @ApiResponse({
     status: 200,
-    description: 'User lists returned sucessfully',
+    description: 'User lists returned successfully',
     type: IndexUserSwagger,
     isArray: true,
   })
@@ -51,7 +51,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Display a user' })
   @ApiResponse({
     status: 200,
-    description: 'A user returned sucessfully',
+    description: 'A user returned successfully',
     type: ShowUserSwagger,
   })
   @ApiResponse({
@@ -67,7 +67,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Display a picture' })
   @ApiResponse({
     status: 200,
-    description: 'A picture returned sucessfully',
+    description: 'A picture returned successfully',
   })
   getPicture(@Param('filename') filename, @Res() res: Response) {
     return of(
@@ -79,7 +79,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Create a user' })
   @ApiResponse({
     status: 201,
-    description: 'User created sucessfully',
+    description: 'User created successfully',
     type: CreateUserSwagger,
   })
   @ApiResponse({
@@ -116,7 +116,7 @@ export class UsersController {
   @ApiOperation({ summary: 'File upload' })
   @ApiResponse({
     status: 201,
-    description: 'File upload sucessfully',
+    description: 'File upload successfully',
   })
   @ApiResponse({
     status: 400,
@@ -149,7 +149,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 204,
-    description: 'User updated sucessfully',
+    description: 'User updated successfully',
   })
   @ApiResponse({
     status: 400,
@@ -171,7 +171,7 @@ export class UsersController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Remove a user' })
-  @ApiResponse({ status: 204, description: 'User removed sucessfully' })
+  @ApiResponse({ status: 204, description: 'User removed successfully' })
   @ApiResponse({
     status: 404,
     description: 'User not found',

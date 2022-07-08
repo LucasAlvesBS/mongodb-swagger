@@ -59,7 +59,7 @@ describe('UsersController', () => {
   });
 
   describe('findAllUsers', () => {
-    it('should return a users schema list sucessfully', async () => {
+    it('should return a users schema list successfully', async () => {
       const result = await usersController.findAllUsers();
 
       expect(result).toEqual(usersSchemaList);
@@ -77,7 +77,7 @@ describe('UsersController', () => {
   });
 
   describe('findOneUser', () => {
-    it('should return one user sucessfully', async () => {
+    it('should return one user successfully', async () => {
       const result = await usersController.findOneUser('1');
 
       expect(result).toEqual(usersSchemaList[0]);
@@ -95,7 +95,7 @@ describe('UsersController', () => {
   });
 
   describe('createUser', () => {
-    it('should create a new user sucessfully', async () => {
+    it('should create a new user successfully', async () => {
       const body: CreateUserDto = {
         name: 'NewUser',
         email: 'newuser@hotmail.com',
@@ -123,7 +123,7 @@ describe('UsersController', () => {
   });
 
   describe('updateUser', () => {
-    it('should update a user sucessfully', async () => {
+    it('should update a user successfully', async () => {
       const body: UpdateUserDto = {
         name: 'UpdatedUser',
         email: 'updateduser@hotmail.com',
@@ -151,7 +151,7 @@ describe('UsersController', () => {
   });
 
   describe('removeUser', () => {
-    it('should remove a user sucessfully', async () => {
+    it('should remove a user successfully', async () => {
       const result = await usersController.removeUser('1');
 
       expect(result).toBeUndefined();
