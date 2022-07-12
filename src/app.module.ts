@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './app/users/users.module';
 import { SendgridModule } from './app/sendgrid/sendgrid.module';
+import { MailModule } from './app/mail/mail.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SendgridModule } from './app/sendgrid/sendgrid.module';
     MongooseModule.forRoot(process.env.DATABASE_URL),
     UsersModule,
     SendgridModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
