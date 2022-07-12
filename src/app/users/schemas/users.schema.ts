@@ -26,6 +26,7 @@ export class User {
     this.name = user?.name;
     this.email = user?.email;
     this.password = user?.password;
+    this.profileImage = user?.profileImage;
   }
 }
 
