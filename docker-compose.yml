@@ -15,7 +15,7 @@ services:
     env_file:
       - .env
   
-  api:
+  api_mongodb:
     container_name: api_mongodb
     build: 
       context: .
