@@ -30,11 +30,11 @@ export class Mail {
   @ApiProperty()
   status: string;
 
-  @Prop()
+  @Prop({ default: Date.now })
   @ApiProperty()
   createdAt: Date;
 
-  @Prop()
+  @Prop({ default: Date.now })
   @ApiProperty()
   updatedAt: Date;
 

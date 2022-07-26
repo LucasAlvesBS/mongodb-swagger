@@ -22,11 +22,16 @@ export class User {
   @ApiProperty()
   profileImage: string;
 
+  @Prop({ default: Date.now })
+  @ApiProperty()
+  createdAt: Date;
+
   constructor(user?: Partial<User>) {
     this.name = user?.name;
     this.email = user?.email;
     this.password = user?.password;
     this.profileImage = user?.profileImage;
+    this.createdAt = user?.createdAt;
   }
 }
 
