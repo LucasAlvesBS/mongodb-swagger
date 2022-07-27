@@ -39,7 +39,7 @@ export class UsersController {
   @ApiOperation({ summary: 'List all users' })
   @ApiResponse({
     status: 200,
-    description: 'User lists returned successfully',
+    description: 'User list returned successfully',
     type: IndexUserSwagger,
     isArray: true,
   })
