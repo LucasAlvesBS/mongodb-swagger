@@ -7,6 +7,7 @@ import { UsersModule } from './app/users/users.module';
 import { SendgridModule } from './app/sendgrid/sendgrid.module';
 import { MailModule } from './app/mail/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ProductsModule } from './app/products/products.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     UsersModule,
     SendgridModule,
     MailModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
