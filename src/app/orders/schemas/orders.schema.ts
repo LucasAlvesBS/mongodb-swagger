@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
+import * as mongoose from 'mongoose';
+import { Product } from '../../products/schemas/products.schema';
+import { User } from '../../users/schemas/users.schema';
 
 export type OrdersDocument = Order & Document;
 
@@ -9,6 +12,14 @@ export class Order {
   @Prop()
   @ApiProperty()
   productsQuantity: number;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users' })
+  @ApiProperty()
+  user: User;
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Products' }])
+  @ApiProperty()
+  products: Product;
 
   @Prop({ default: Date.now })
   @ApiProperty()

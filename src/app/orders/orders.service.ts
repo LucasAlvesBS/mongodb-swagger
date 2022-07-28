@@ -14,7 +14,10 @@ export class OrdersService {
   ) {}
 
   async findAllOrders() {
-    return await this.ordersModel.find();
+    return await this.ordersModel
+      .find()
+      .populate('user', 'name email')
+      .populate('products', 'size color price -_id');
   }
 
   async findOneOrder(id: string) {
