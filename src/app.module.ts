@@ -8,6 +8,7 @@ import { SendgridModule } from './app/sendgrid/sendgrid.module';
 import { MailModule } from './app/mail/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ProductsModule } from './app/products/products.module';
+import { OrdersModule } from './app/orders/orders.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProductsModule } from './app/products/products.module';
     SendgridModule,
     MailModule,
     ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
