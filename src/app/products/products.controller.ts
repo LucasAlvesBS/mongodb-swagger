@@ -10,7 +10,10 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BadRequestSwagger, NotFoundSwagger } from 'src/helpers/swagger.helper';
+import {
+  BadRequestSwagger,
+  NotFoundSwagger,
+} from '../../helpers/swagger.helper';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
