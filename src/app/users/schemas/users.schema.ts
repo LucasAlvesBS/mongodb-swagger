@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
+import { Order } from '../../orders/schemas/orders.schema';
 
 export type UsersDocument = User & Document;
 
@@ -21,6 +22,10 @@ export class User {
   @Prop()
   @ApiProperty()
   profileImage: string;
+
+  @Prop()
+  @ApiProperty()
+  orders: Order[];
 
   @Prop({ default: Date.now })
   @ApiProperty()

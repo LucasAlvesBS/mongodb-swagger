@@ -13,8 +13,8 @@ export class Order {
   @ApiProperty()
   productsQuantity: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users' })
-  @ApiProperty()
+  @Prop({ type: () => mongoose.Schema.Types.ObjectId, ref: 'Users' })
+  @ApiProperty({ type: () => mongoose.Schema.Types.ObjectId })
   user: User;
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Products' }])

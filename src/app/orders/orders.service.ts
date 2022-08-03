@@ -16,7 +16,7 @@ export class OrdersService {
   async findAllOrders() {
     return await this.ordersModel
       .find()
-      .populate('user', 'name email')
+      .populate([{ path: 'user', select: 'name email -_id' }])
       .populate('products', 'size color price -_id');
   }
 
