@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UsersDocument } from './schemas/users.schema';
+import { UsersDocument } from './schemas/users.schema';
 
 @Injectable()
 export class UsersService {
@@ -16,11 +16,22 @@ export class UsersService {
   ) {}
 
   async findAllUsers() {
-    return await this.usersModel.find().select('-orders.user');
+    return await this.usersModel
+      .find()
+      .select('-__v')
+      .populate({
+        path: 'orders',
+        select: 'productsQuantity createdAt -user',
+        populate: { path: 'products', select: 'size color price' },
+      });
   }
 
-  async findOneUser(id: string | User) {
-    const user = await this.usersModel.findById(id).populate('orders');
+  async findOneUser(id: string) {
+    const user = await this.usersModel.findById(id).populate({
+      path: 'orders',
+      select: 'productsQuantity createdAt -user',
+      populate: { path: 'products', select: 'size color price' },
+    });
     if (user === null) {
       throw new NotFoundException('Page not found');
     }

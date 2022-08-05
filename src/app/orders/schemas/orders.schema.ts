@@ -4,6 +4,7 @@ import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Product } from '../../products/schemas/products.schema';
 import { User } from '../../users/schemas/users.schema';
+import { Type } from 'class-transformer';
 
 export type OrdersDocument = Order & Document;
 
@@ -13,13 +14,15 @@ export class Order {
   @ApiProperty()
   productsQuantity: number;
 
-  @Prop({ type: () => mongoose.Schema.Types.ObjectId, ref: 'Users' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users' })
+  @Type(() => User)
   @ApiProperty({ type: () => mongoose.Schema.Types.ObjectId })
   user: User;
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Products' }])
-  @ApiProperty()
-  products: Product;
+  @Type(() => Product)
+  @ApiProperty({ type: () => mongoose.Schema.Types.ObjectId })
+  products: Product[];
 
   @Prop({ default: Date.now })
   @ApiProperty()
@@ -31,6 +34,8 @@ export class Order {
 
   constructor(order?: Partial<Order>) {
     this.productsQuantity = order?.productsQuantity;
+    this.user = order?.user;
+    this.products = order?.products;
     this.createdAt = order?.createdAt;
     this.updatedAt = order?.updatedAt;
   }

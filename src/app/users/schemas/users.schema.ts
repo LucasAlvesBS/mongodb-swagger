@@ -1,11 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { Document } from 'mongoose';
 import { Order } from '../../orders/schemas/orders.schema';
 
 export type UsersDocument = User & Document;
 
-@Schema()
+@Schema({
+  toJSON: {
+    getters: true,
+    virtuals: true,
+  },
+  id: false,
+})
 export class User {
   @Prop()
   @ApiProperty()
@@ -23,8 +30,7 @@ export class User {
   @ApiProperty()
   profileImage: string;
 
-  @Prop()
-  @ApiProperty()
+  @Type(() => Order)
   orders: Order[];
 
   @Prop({ default: Date.now })
@@ -36,8 +42,17 @@ export class User {
     this.email = user?.email;
     this.password = user?.password;
     this.profileImage = user?.profileImage;
+    this.orders = user?.orders;
     this.createdAt = user?.createdAt;
   }
 }
 
-export const UsersSchema = SchemaFactory.createForClass(User);
+const UsersSchema = SchemaFactory.createForClass(User);
+
+UsersSchema.virtual('orders', {
+  ref: 'Orders',
+  localField: '_id',
+  foreignField: 'user',
+});
+
+export { UsersSchema };
