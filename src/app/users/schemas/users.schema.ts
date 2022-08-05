@@ -14,7 +14,7 @@ export type UsersDocument = User & Document;
   id: false,
 })
 export class User {
-  @Prop()
+  @Prop({ trim: true })
   @ApiProperty()
   name: string;
 
