@@ -43,8 +43,12 @@ export class UsersController {
     type: IndexUserSwagger,
     isArray: true,
   })
-  async findAllUsers(): Promise<UsersDocument[]> {
-    return await this.usersService.findAllUsers();
+  async findAllUsers(
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<UsersDocument[]> {
+    const users = await this.usersService.findAllUsers();
+    response.cookie('users', users, { httpOnly: true });
+    return users;
   }
 
   @Get(':id')
