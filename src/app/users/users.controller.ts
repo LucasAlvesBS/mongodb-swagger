@@ -12,9 +12,15 @@ import {
   UploadedFile,
   BadRequestException,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { BadRequestSwagger } from '../../helpers/swagger.helper';
 import { NotFoundSwagger } from '../../helpers/swagger.helper';
@@ -29,6 +35,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { of } from 'rxjs';
 import { join } from 'path';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('api/v1/users')
 @ApiTags('users')
@@ -51,6 +58,8 @@ export class UsersController {
     return users;
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Display a user' })
   @ApiResponse({
@@ -75,7 +84,7 @@ export class UsersController {
   })
   getPicture(@Param('filename') filename, @Res() res: Response) {
     return of(
-      res.sendFile(join(process.cwd(), 'src/users/uploads/' + filename)),
+      res.sendFile(join(process.cwd(), 'src/app/users/uploads/' + filename)),
     );
   }
 

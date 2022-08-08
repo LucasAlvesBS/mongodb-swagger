@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('mongoDB API')
     .setDescription('API to test mongoDB')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

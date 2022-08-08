@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Document } from 'mongoose';
+import { Role } from '../../../shared/enum/role.enum';
 import { Order } from '../../orders/schemas/orders.schema';
 
 export type UsersDocument = User & Document;
@@ -29,6 +30,10 @@ export class User {
   @Prop()
   @ApiProperty()
   profileImage: string;
+
+  @Prop({ enum: Role, default: Role.USER })
+  @ApiProperty({ enum: Role })
+  role: Role;
 
   @Type(() => Order)
   orders: Order[];

@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { hashSync } from 'bcrypt';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,13 +28,24 @@ export class UsersService {
   }
 
   async findOneUser(id: string) {
-    const user = await this.usersModel.findById(id).populate({
-      path: 'orders',
-      select: 'productsQuantity createdAt -user',
-      populate: { path: 'products', select: 'size color price' },
-    });
+    const user = await this.usersModel
+      .findById(id)
+      .select('-password')
+      .populate({
+        path: 'orders',
+        select: 'productsQuantity createdAt -user',
+        populate: { path: 'products', select: 'size color price' },
+      });
     if (user === null) {
       throw new NotFoundException('Page not found');
+    }
+    return user;
+  }
+
+  async checkUser(email: string) {
+    const user = await this.usersModel.findOne({ email: email });
+    if (!user) {
+      throw new Error();
     }
     return user;
   }
@@ -45,7 +57,10 @@ export class UsersService {
       throw new ConflictException('Invalid email');
     }
     const user = await this.usersModel.create(data);
-    return await user.save();
+    user.password = hashSync(user.password, 10);
+    await user.save();
+    user.password = undefined;
+    return user;
   }
 
   async updateUser(id: string, data: UpdateUserDto) {
