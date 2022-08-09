@@ -12,6 +12,11 @@ export const CHECK_ABILITY = 'check_ability';
 export const checkAbilities = (...requirements: RequiredRule[]) =>
   SetMetadata(CHECK_ABILITY, requirements);
 
+export class ManageUserAbility implements RequiredRule {
+  action = Action.Manage;
+  subject = User;
+}
+
 export class ReadUserAbility implements RequiredRule {
   action = Action.Read;
   subject = User;

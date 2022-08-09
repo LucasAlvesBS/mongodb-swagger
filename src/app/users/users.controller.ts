@@ -40,6 +40,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { AbilityGuard } from '../../ability/ability.guard';
 import {
   checkAbilities,
+  ManageUserAbility,
   ReadUserAbility,
 } from '../../ability/ability.decorator';
 
@@ -48,6 +49,9 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AbilityGuard)
+  @checkAbilities(new ManageUserAbility())
   @Get()
   @ApiOperation({ summary: 'List all users' })
   @ApiResponse({
