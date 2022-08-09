@@ -13,6 +13,7 @@ import {
   BadRequestException,
   Res,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -34,7 +35,7 @@ import { UsersService } from './users.service';
 import { v4 as uuidv4 } from 'uuid';
 import { of } from 'rxjs';
 import { join } from 'path';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { AbilityGuard } from '../../ability/ability.guard';
 import {
@@ -78,8 +79,11 @@ export class UsersController {
     description: 'User not found',
     type: NotFoundSwagger,
   })
-  async findOneUser(@Param('id') id: string): Promise<UsersDocument> {
-    return await this.usersService.findOneUser(id);
+  async findOneUser(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<UsersDocument> {
+    return await this.usersService.findOneUser(id, req);
   }
 
   @Get('pictures/:filename')
