@@ -35,7 +35,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { of } from 'rxjs';
 import { join } from 'path';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { AbilityGuard } from '../../ability/ability.guard';
+import {
+  checkAbilities,
+  ReadUserAbility,
+} from '../../ability/ability.decorator';
 
 @Controller('api/v1/users')
 @ApiTags('users')
@@ -59,7 +64,8 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AbilityGuard)
+  @checkAbilities(new ReadUserAbility())
   @Get(':id')
   @ApiOperation({ summary: 'Display a user' })
   @ApiResponse({

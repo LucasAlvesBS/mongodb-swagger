@@ -1,12 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Transform } from 'class-transformer';
+import { Document, ObjectId } from 'mongoose';
 import { Size } from '../../../shared/enum/size.enum';
 
 export type ProductsDocument = Product & Document;
 
 @Schema()
 export class Product {
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
+
   @Prop({ enum: Size })
   @ApiProperty()
   size: Size;

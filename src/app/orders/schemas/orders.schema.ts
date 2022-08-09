@@ -1,15 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Product } from '../../products/schemas/products.schema';
 import { User } from '../../users/schemas/users.schema';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export type OrdersDocument = Order & Document;
 
 @Schema()
 export class Order {
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
+
   @Prop()
   @ApiProperty()
   productsQuantity: number;

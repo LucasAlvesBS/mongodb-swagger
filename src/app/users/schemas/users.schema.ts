@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { Document } from 'mongoose';
+import { Transform, Type } from 'class-transformer';
+import { Document, ObjectId } from 'mongoose';
 import { Role } from '../../../shared/enum/role.enum';
 import { Order } from '../../orders/schemas/orders.schema';
 
@@ -15,6 +15,9 @@ export type UsersDocument = User & Document;
   id: false,
 })
 export class User {
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
+
   @Prop({ trim: true })
   @ApiProperty()
   name: string;
