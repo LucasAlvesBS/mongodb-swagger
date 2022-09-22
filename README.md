@@ -8,6 +8,7 @@ Projeto simples com 3 entidades (Users, Orders e Products) para treinar as segui
 - Cron
 - Multer
 - Cookie-parser
+- Swagger
 
 ## Installation
 
